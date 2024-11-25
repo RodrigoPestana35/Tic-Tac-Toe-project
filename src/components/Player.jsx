@@ -4,7 +4,7 @@ export default function Player({name, symbol}) {
     let [isEditing, setIsEditing] = useState(false);
 
     function handleEditClick() {
-        //setIsEditing(!isEditing);    Não usar dessa forma, pois pode haver problemas de sincronização
+        //setIsEditing(!isEditing);    Não usar dessa forma, pois pode haver problemas de sincronização, pois o valor atualizado pode não ser baseado no valor anterior porque o React agenda as atualizações de estado
         setIsEditing((prevIsEditing) => !prevIsEditing);  // Usar dessa forma para garantir que o valor atualizado seja baseado no valor anterior
     }
 
