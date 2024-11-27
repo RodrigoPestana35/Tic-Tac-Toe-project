@@ -1,12 +1,15 @@
 import { useState } from "react"
 import Player from "./components/Player"
 import GameBoard from "./components/GameBoard"
+import Log from "./components/Log";
 
 function App() {
   let [activePlayer, setActivePlayer] = useState("X");
+  let [gameTurns, setGameTurns] = useState([]);
 
   function handleSelectCell(){
     setActivePlayer((prevActivePlayer) => prevActivePlayer === "X" ? "O" : "X");
+    setGameTurns();
   }
 
   return (
@@ -18,6 +21,7 @@ function App() {
         </ol>
         <GameBoard onSelectCell={handleSelectCell} activePlayerSymbol={activePlayer} />
       </div>
+      <Log />
     </main>
   )
 }
