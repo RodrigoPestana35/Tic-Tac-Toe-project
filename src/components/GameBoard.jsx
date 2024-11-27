@@ -6,7 +6,7 @@ const initialGameBoard = [
     [null, null, null]
 ]
 
-export default function GameBoard() {
+export default function GameBoard({ onSelectCell }) {
     let [gameBoard, setGameBoard] = useState(initialGameBoard);
 
     function handleSelectCell(rowIndex, cellIndex) {
@@ -17,6 +17,7 @@ export default function GameBoard() {
             updatedBoard[rowIndex][cellIndex] = "X";  //Atualiza a célula selecionada com o valor "X"
             return updatedBoard; //Retorna o novo estado atualizado com a célula selecionada
         });
+        onSelectCell();
     }
 
 
