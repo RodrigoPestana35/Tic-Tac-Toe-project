@@ -7,9 +7,16 @@ function App() {
   let [activePlayer, setActivePlayer] = useState("X");
   let [gameTurns, setGameTurns] = useState([]);
 
-  function handleSelectCell(){
+  function handleSelectCell(rowIndex, columnIndex){
     setActivePlayer((prevActivePlayer) => prevActivePlayer === "X" ? "O" : "X");
-    setGameTurns();
+    setGameTurns((prevTurns) => {
+      let currentPlayer = 'X';
+      if(prevTurns.length > 0 && prevTurns[0].player === 'X'){
+        currentPlayer = 'O';
+      }
+      const updateTurns = [{ square: {row: rowIndex, col: columnIndex}, player: currentPlayer }, ...prevTurns];
+      return updateTurns;
+    });
   }
 
   return (
@@ -19,7 +26,7 @@ function App() {
           <Player initialName="Player 1" symbol="X" isActive={activePlayer === "X"}/>
           <Player initialName="Player 2" symbol="O" isActive={activePlayer === "O"}/>
         </ol>
-        <GameBoard onSelectCell={handleSelectCell} activePlayerSymbol={activePlayer} />
+        <GameBoard onSelectCell={handleSelectCell} />
       </div>
       <Log />
     </main>
