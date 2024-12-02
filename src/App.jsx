@@ -9,7 +9,12 @@ const initialGameBoard = [
   [null, null, null],
   [null, null, null],
   [null, null, null]
-]
+];
+
+const PLAYERS = {
+  X: 'Player 1',
+  O: 'Player 2'
+}
 
 function deriveActivePlayer(gameTurns) {
   let currentPlayer = 'X';
@@ -19,10 +24,39 @@ function deriveActivePlayer(gameTurns) {
   return currentPlayer;
 }
 
+function deriveWinner(gameBoard, players) {
+  let winner;
+
+  for (const combination of WINNING_COMBINATIONS) {
+    const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
+    const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
+    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
+
+    if (firstSquareSymbol && firstSquareSymbol === secondSquareSymbol && firstSquareSymbol === thirdSquareSymbol) {
+      winner = players[firstSquareSymbol];
+    }
+  }
+
+  return winner;
+}
+
+function deriveGameBoard(gameTurns) {
+  let gameBoard = [...initialGameBoard.map(row => [...row])];
+
+  for (const turn of gameTurns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+
+    gameBoard[row][col] = player;
+  }
+
+  return gameBoard;
+}
+
 function App() {
   //let [activePlayer, setActivePlayer] = useState("X");
   let [gameTurns, setGameTurns] = useState([]);
-  let [players, setPlayers] = useState({X: 'Player 1', O: 'Player 2'});
+  let [players, setPlayers] = useState(PLAYERS);
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
@@ -30,26 +64,9 @@ function App() {
   //mesmo que guardemos o mesmo array em varias variaveis, estaremos sempre a alterar o array original, neste caso o initialGameBoard
   //temos de fazer uma cópia do array
 
-  let gameBoard = [...initialGameBoard.map(row => [...row])];
+  const gameBoard = deriveGameBoard(gameTurns);
 
-  for (const turn of gameTurns) {
-      const {square, player} = turn;
-      const {row, col} = square;
-
-      gameBoard[row][col] = player;
-  }
-
-  let winner;
-
-  for(const combination of WINNING_COMBINATIONS) {
-    const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
-    const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
-    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
-    
-    if(firstSquareSymbol && firstSquareSymbol === secondSquareSymbol && firstSquareSymbol === thirdSquareSymbol) {
-      winner = players[firstSquareSymbol];
-    }
-  }
+  const winner = deriveWinner(gameBoard, players);
 
   const hasDraw = gameTurns.length === 9 && !winner;
 
@@ -79,10 +96,10 @@ function App() {
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
-          <Player initialName="Player 1" symbol="X" isActive={activePlayer === "X"} onChangeName={handlePlayerNameChange}/>
-          <Player initialName="Player 2" symbol="O" isActive={activePlayer === "O"} onChangeName={handlePlayerNameChange}/>
+          <Player initialName={PLAYERS.X} symbol="X" isActive={activePlayer === "X"} onChangeName={handlePlayerNameChange} />
+          <Player initialName={PLAYERS.O} symbol="O" isActive={activePlayer === "O"} onChangeName={handlePlayerNameChange} />
         </ol>
-        {(winner || hasDraw) && <GameOver winner={winner} onRematch={handleRematch}/>}
+        {(winner || hasDraw) && <GameOver winner={winner} onRematch={handleRematch} />}
         <GameBoard onSelectCell={handleSelectCell} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
