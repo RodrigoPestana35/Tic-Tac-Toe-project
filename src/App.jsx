@@ -1,8 +1,8 @@
 import { useState } from "react"
 import Player from "./components/Player"
 import GameBoard from "./components/GameBoard"
-import Log from "./components/Log";
-import { WINNING_COMBINATIONS } from "./winning-combinations";
+import Log from "./components/Log"
+import { WINNING_COMBINATIONS } from "./winning-combinations"
 
 const initialGameBoard = [
   [null, null, null],
@@ -33,10 +33,17 @@ function App() {
       gameBoard[row][col] = player;
   }
 
+  let winner;
+
   for(const combination of WINNING_COMBINATIONS) {
-    const firstSquare = gameBoard[combination[0].row][combination[0].col];
-    const secondSquare = gameBoard[combination[1].row][combination[1].col];
-    const thirdSquare = gameBoard[combination[2].row][combination[2].col];
+    const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
+    const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
+    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
+    console.log(firstSquareSymbol, secondSquareSymbol, thirdSquareSymbol);
+    if(firstSquareSymbol && firstSquareSymbol === secondSquareSymbol && firstSquareSymbol === thirdSquareSymbol) {
+      winner = firstSquareSymbol;
+      break;
+    }
   }
 
   function handleSelectCell(rowIndex, columnIndex) {
@@ -55,6 +62,7 @@ function App() {
           <Player initialName="Player 1" symbol="X" isActive={activePlayer === "X"} />
           <Player initialName="Player 2" symbol="O" isActive={activePlayer === "O"} />
         </ol>
+        {winner && <h2>{winner} wins!</h2>}
         <GameBoard onSelectCell={handleSelectCell} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
