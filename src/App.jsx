@@ -25,7 +25,11 @@ function App() {
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
-  let gameBoard = initialGameBoard;
+  //let gameBoard = initialGameBoard;  o bug está aqui, porque o array é como u objeto sao passados por referência, ou seja
+  //mesmo que guardemos o mesmo array em varias variaveis, estaremos sempre a alterar o array original, neste caso o initialGameBoard
+  //temos de fazer uma cópia do array
+
+  let gameBoard = [...initialGameBoard.map(row => [...row])];
 
   for (const turn of gameTurns) {
       const {square, player} = turn;
@@ -57,6 +61,10 @@ function App() {
     });
   }
 
+  function handleRematch() {
+    setGameTurns([]);
+  }
+
   return (
     <main>
       <div id="game-container">
@@ -64,7 +72,7 @@ function App() {
           <Player initialName="Player 1" symbol="X" isActive={activePlayer === "X"} />
           <Player initialName="Player 2" symbol="O" isActive={activePlayer === "O"} />
         </ol>
-        {(winner || hasDraw) && <GameOver winner={winner} />}
+        {(winner || hasDraw) && <GameOver winner={winner} onRematch={handleRematch}/>}
         <GameBoard onSelectCell={handleSelectCell} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
