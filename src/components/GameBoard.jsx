@@ -15,7 +15,7 @@ export default function GameBoard({ onSelectCell, board }) {
     return (
         <ol id="game-board">
             {board.map((row, rowIndex) => (
-                <il key={rowIndex}>
+                <li key={rowIndex}>
                     <ol>
                         {row.map((cell, cellIndex) => (
                             <li key={cellIndex}>
@@ -23,7 +23,7 @@ export default function GameBoard({ onSelectCell, board }) {
                             </li>
                         ))}
                     </ol>
-                </il>
+                </li>
             ))}
         </ol>
     )
