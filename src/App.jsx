@@ -22,6 +22,7 @@ function deriveActivePlayer(gameTurns) {
 function App() {
   //let [activePlayer, setActivePlayer] = useState("X");
   let [gameTurns, setGameTurns] = useState([]);
+  let [players, setPlayers] = useState({X: 'Player 1', O: 'Player 2'});
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
@@ -63,6 +64,15 @@ function App() {
 
   function handleRematch() {
     setGameTurns([]);
+  }
+
+  function handlePlayerNameChange(symbol, newName) {
+    setPlayers((prevPlayers) => {
+      return {
+        ...prevPlayers,
+        [symbol]: newName //Atualiza o nome do jogador com o símbolo correspondente, os [] são usados para acessar a propriedade do objeto com base em uma variável
+      }
+    });
   }
 
   return (
